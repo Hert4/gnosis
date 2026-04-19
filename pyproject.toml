@@ -1,0 +1,28 @@
+[project]
+name = "gnosis"
+version = "0.1.0"
+description = "Modular retrieval framework — LangChain/LangGraph compatible"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+langchain = ["langchain-core>=0.1"]
+langgraph = ["langgraph>=0.0.40"]
+smartsearch_v4 = []  # local path dep added in dev setup
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio",
+    "mypy",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gnosis*"]

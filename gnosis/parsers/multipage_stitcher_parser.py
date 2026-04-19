@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from gnosis._vendor import ensure_agent_search_on_path
 from gnosis.core.registry import register
 from gnosis.core.schema import Document, Table
 
@@ -24,9 +23,9 @@ class MultipageStitcherParser:
         if document is None:
             raise ValueError("MultipageStitcherParser requires a Document")
 
-        ensure_agent_search_on_path()
-        from parsing.html_table_parser import parse_tables_from_markdown
-        from parsing.multipage_stitcher import stitch_document
+
+        from gnosis._impl.html_table_parser import parse_tables_from_markdown
+        from gnosis._impl.multipage_stitcher import stitch_document
 
         # Re-parse per-page tables so we can feed stitcher its native format
         # (parsing.schema.Table objects keyed by page)

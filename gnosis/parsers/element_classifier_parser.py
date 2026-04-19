@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from gnosis._vendor import ensure_agent_search_on_path
 from gnosis.core.registry import register
 from gnosis.core.schema import Document
 
@@ -19,8 +18,8 @@ class ElementClassifierParser:
         if document is None:
             raise ValueError("ElementClassifierParser requires a Document")
 
-        ensure_agent_search_on_path()
-        from parsing.element_classifier import tag_elements
+
+        from gnosis._impl.element_classifier import tag_elements
 
         all_captions: list[dict] = []
         all_footnotes: list[dict] = []

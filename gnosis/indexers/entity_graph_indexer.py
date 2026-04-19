@@ -6,7 +6,6 @@ If no LLM client configured, skips graph build gracefully.
 
 from __future__ import annotations
 
-from gnosis._vendor import ensure_agent_search_on_path
 from gnosis.core.registry import register
 from gnosis.core.schema import Document
 
@@ -32,8 +31,8 @@ class EntityGraphIndexer:
         self._tree_indexer = tree_indexer
 
     def build(self, document: Document, **kwargs) -> None:
-        ensure_agent_search_on_path()
-        from smartsearch.entity_graph import DocumentEntityGraph
+
+        from gnosis._impl.entity_graph import DocumentEntityGraph
 
         if not self.llm_client or not self.llm_model:
             document.meta["entity_graph_skipped"] = "no_llm_client"

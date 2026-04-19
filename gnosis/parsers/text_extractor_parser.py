@@ -9,7 +9,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from gnosis._vendor import ensure_agent_search_on_path
 from gnosis.core.registry import register
 from gnosis.core.schema import Document
 
@@ -24,8 +23,8 @@ class TextExtractorParser:
 
     def _get_extractor(self):
         if self._extractor is None:
-            ensure_agent_search_on_path()
-            from smartsearch.text_extractor import TextExtractor
+
+            from gnosis._impl.text_extractor import TextExtractor
             self._extractor = TextExtractor()
         return self._extractor
 

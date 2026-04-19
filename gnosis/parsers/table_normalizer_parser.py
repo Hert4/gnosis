@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from gnosis._vendor import ensure_agent_search_on_path
 from gnosis.core.registry import register
 from gnosis.core.schema import Document, Table
 
@@ -23,9 +22,9 @@ class TableNormalizerParser:
         if document is None:
             raise ValueError("TableNormalizerParser requires an input Document")
 
-        ensure_agent_search_on_path()
-        from parsing.html_table_parser import parse_tables_from_markdown
-        from parsing.table_normalizer import normalize_tables_in_markdown
+
+        from gnosis._impl.html_table_parser import parse_tables_from_markdown
+        from gnosis._impl.table_normalizer import normalize_tables_in_markdown
 
         for pg in document.pages:
             if not pg.markdown:

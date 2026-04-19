@@ -1,10 +1,10 @@
 # gnosis
 
-Modular retrieval/QA framework built on top of agent-search/smartsearch-v4.
-Layered architecture lets you pick individual components — OCR, indexing,
-retrieval, synthesis, routing — or wire them into a full pipeline.
+Modular retrieval/QA framework — pick individual components (OCR, indexing,
+retrieval, synthesis, routing) or wire them into a full pipeline.
+Standalone; optional adapters for LangChain and LangGraph.
 
-**Status:** functional, all phases implemented. Tests passing across 50+ cases.
+**Status:** functional, all phases implemented. 58 tests passing.
 
 ## Install
 
@@ -15,8 +15,8 @@ pip install -e ".[langchain]"                 # + LangChain adapters
 pip install -e ".[langgraph]"                 # + LangGraph adapters
 ```
 
-agent-search must be reachable; by default resolved as `../agent-search/smartsearch-v4`
-relative to this repo. Override with `RETRIVAL_AGENT_SEARCH=<path>`.
+No runtime dependency on agent-search. Heavy implementations (OCR2Engine,
+TableNormalizer, TreeIndex, EntityGraph, etc.) live in ``gnosis/_impl/``.
 
 ## Layers
 

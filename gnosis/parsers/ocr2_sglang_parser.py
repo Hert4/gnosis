@@ -10,7 +10,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from gnosis._vendor import ensure_agent_search_on_path
 from gnosis.core.registry import register
 from gnosis.core.schema import Document, Page
 
@@ -40,8 +39,8 @@ class OCR2SglangParser:
 
     def _get_engine(self):
         if self._engine is None:
-            ensure_agent_search_on_path()
-            from smartsearch.ocr2_engine import OCR2Engine
+
+            from gnosis._impl.ocr2_engine import OCR2Engine
             self._engine = OCR2Engine(
                 api_base=self.api_base,
                 model_name=self.model_name,

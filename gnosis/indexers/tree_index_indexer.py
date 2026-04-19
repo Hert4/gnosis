@@ -6,7 +6,6 @@ and enricher afterwards for LLM-generated summaries on nodes.
 
 from __future__ import annotations
 
-from gnosis._vendor import ensure_agent_search_on_path
 from gnosis.core.registry import register
 from gnosis.core.schema import Document
 
@@ -30,8 +29,8 @@ class TreeIndexIndexer:
         self._tree_index = None
 
     def _ensure(self):
-        ensure_agent_search_on_path()
-        from smartsearch.tree_index import DocumentTreeIndex
+
+        from gnosis._impl.tree_index import DocumentTreeIndex
         if self._tree_index is None:
             self._tree_index = DocumentTreeIndex()
         return self._tree_index
@@ -49,11 +48,11 @@ class TreeIndexIndexer:
         )
 
         if self.run_refiner and self.llm_client and self.llm_model:
-            from smartsearch.refiner import TreeRefiner
+            from gnosis._impl.refiner import TreeRefiner
             TreeRefiner(client=self.llm_client, model=self.llm_model).refine(tree.tree)
 
         if self.run_enricher and self.llm_client and self.llm_model:
-            from smartsearch.enricher import TreeEnricher
+            from gnosis._impl.enricher import TreeEnricher
             TreeEnricher(client=self.llm_client, model=self.llm_model).enrich(tree.tree)
 
         # Snapshot sections to framework schema for downstream consumers

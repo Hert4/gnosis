@@ -6,7 +6,6 @@ query via ``indexer.query(text, top_k)``.
 
 from __future__ import annotations
 
-from gnosis._vendor import ensure_agent_search_on_path
 from gnosis.core.registry import register
 from gnosis.core.schema import Document
 
@@ -22,8 +21,8 @@ class PageBM25Indexer:
         self._bm25 = None
 
     def _make(self):
-        ensure_agent_search_on_path()
-        from smartsearch.index import PageBM25
+
+        from gnosis._impl.index import PageBM25
         self._bm25 = PageBM25(mode=self.mode, k1=self.k1, b=self.b)
 
     def build(self, document: Document, **kwargs) -> None:

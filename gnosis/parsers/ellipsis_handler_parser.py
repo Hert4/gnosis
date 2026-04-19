@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from gnosis._vendor import ensure_agent_search_on_path
 from gnosis.core.registry import register
 from gnosis.core.schema import Document
 
@@ -19,8 +18,8 @@ class EllipsisHandlerParser:
         if document is None:
             raise ValueError("EllipsisHandlerParser requires a Document")
 
-        ensure_agent_search_on_path()
-        from parsing.ellipsis_handler import handle_ellipsis_page
+
+        from gnosis._impl.ellipsis_handler import handle_ellipsis_page
 
         ellipsis_pages: dict[int, dict] = {}
         for pg in document.pages:

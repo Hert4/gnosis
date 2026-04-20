@@ -1,8 +1,8 @@
-"""OCR2 parser — wraps Nanonets-OCR2-3B via sglang API or local fallback.
+"""OCR2 parser — wraps Nanonets-OCR2-3B via any OpenAI-compatible API
+(sglang, vLLM, OpenRouter, LM Studio, ...) or local transformers fallback.
 
-Preserves exact OCR call params (prompt, DPI, max_tokens) from the existing
-`smartsearch/ocr2_engine.py`. Only OCR pages that lack sufficient text
-(page_type='scan') unless `ocr_all=True`.
+Only OCR pages that lack sufficient text (page_type='scan') unless
+`ocr_all=True`. Pass `api_key`/`extra_headers` for authenticated endpoints.
 """
 
 from __future__ import annotations
@@ -14,9 +14,9 @@ from gnosis.core.registry import register
 from gnosis.core.schema import Document, Page
 
 
-@register("parser", "ocr2_sglang")
-class OCR2SglangParser:
-    """OCR pages via Nanonets-OCR2-3B (sglang API or local transformers)."""
+@register("parser", "ocr2")
+class OCR2Parser:
+    """OCR pages via Nanonets-OCR2-3B (OpenAI-compatible API or local transformers)."""
 
     def __init__(
         self,
@@ -27,6 +27,8 @@ class OCR2SglangParser:
         dpi: int = 250,
         ocr_all: bool = False,
         min_text_chars: int = 300,
+        api_key: str | None = None,
+        extra_headers: dict[str, str] | None = None,
     ) -> None:
         self.api_base = api_base
         self.model_name = model_name
@@ -35,6 +37,8 @@ class OCR2SglangParser:
         self.dpi = dpi
         self.ocr_all = ocr_all
         self.min_text_chars = min_text_chars
+        self.api_key = api_key
+        self.extra_headers = extra_headers
         self._engine = None
 
     def _get_engine(self):
@@ -46,6 +50,8 @@ class OCR2SglangParser:
                 model_name=self.model_name,
                 max_tokens=self.max_tokens,
                 timeout=self.timeout,
+                api_key=self.api_key,
+                extra_headers=self.extra_headers,
             )
         return self._engine
 
@@ -56,7 +62,7 @@ class OCR2SglangParser:
         if document is None:
             # Need pages from a source parser first — don't re-OCR from scratch
             raise ValueError(
-                "OCR2SglangParser requires an input Document (run pdfplumber first)"
+                "OCR2Parser requires an input Document (run pdfplumber first)"
             )
 
         engine = self._get_engine()

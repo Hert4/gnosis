@@ -31,7 +31,7 @@ from gnosis.core.schema import Document, Page
 
 def test_all_parsers_registered():
     expected = {
-        "pdfplumber", "ocr2_sglang", "text_extractor",
+        "pdfplumber", "ocr2", "text_extractor",
         "table_normalizer", "multipage_stitcher",
         "element_classifier", "ellipsis_handler",
     }

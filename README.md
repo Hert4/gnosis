@@ -90,7 +90,7 @@ answer = router.query("question")
 ```
 gnosis/
 ├── core/           # protocols, schema, pipeline, registry, config, events
-├── parsers/        # pdfplumber, ocr2_sglang, text_extractor, table_normalizer,
+├── parsers/        # pdfplumber, ocr2, text_extractor, table_normalizer,
 │                   # multipage_stitcher, element_classifier, ellipsis_handler
 ├── indexers/       # page_bm25, tree_index, entity_graph
 ├── retrievers/     # 5 channels + hybrid_chatbot composer + agent_loop

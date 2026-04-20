@@ -10,7 +10,7 @@ Usage:
     pipeline.load_document("doc.pdf")
     answer = pipeline.query("câu hỏi")
 
-Parsers: pdfplumber → ocr2_sglang → table_normalizer → ellipsis_handler
+Parsers: pdfplumber → ocr2 → table_normalizer → ellipsis_handler
          → element_classifier (→ multipage_stitcher optional)
 Indexers: page_bm25 (bmx mode) + tree_index + entity_graph
 Retriever: hybrid_chatbot with all 5 channels
@@ -32,7 +32,7 @@ from gnosis.parsers import (
     ElementClassifierParser,
     EllipsisHandlerParser,
     MultipageStitcherParser,
-    OCR2SglangParser,
+    OCR2Parser,
     PdfplumberParser,
     TableNormalizerParser,
     TextExtractorParser,
@@ -67,7 +67,7 @@ def build(
     Args:
         llm_client: OpenAI-compatible client (used by tree-nav + query expansion + synth).
         llm_model: Model name (e.g., "gemini-2.5-flash").
-        ocr2_api_base: sglang API endpoint for OCR2-3B.
+        ocr2_api_base: OpenAI-compatible API endpoint for OCR2-3B (sglang/vLLM/...).
         render_dpi: OCR render resolution (don't change unless you know why).
         enable_ocr2: Include OCR2 parser (requires sglang running or local GPU).
         enable_text_extractor: Include pdftohtml TextExtractor parser.
@@ -119,7 +119,7 @@ def build(
     if enable_text_extractor:
         builder.parse(TextExtractorParser())
     if enable_ocr2:
-        builder.parse(OCR2SglangParser(
+        builder.parse(OCR2Parser(
             api_base=ocr2_api_base,
             dpi=render_dpi,
         ))

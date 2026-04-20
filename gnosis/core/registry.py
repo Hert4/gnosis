@@ -66,7 +66,7 @@ def register(layer: str, name: str):
     """Decorator for plugin classes.
 
     Usage:
-        @register("parser", "ocr2_sglang")
+        @register("parser", "ocr2")
         class OCR2Parser: ...
     """
     def _decorator(cls: type) -> type:
@@ -84,7 +84,7 @@ def make(layer: str, name: str, **kwargs: Any):
     """Convenience: look up a plugin and instantiate it.
 
     Example:
-        ocr = make("parser", "ocr2_sglang", dpi=250)
+        ocr = make("parser", "ocr2", dpi=250)
     """
     cls = PluginRegistry.get(layer, name)
     return cls(**kwargs)

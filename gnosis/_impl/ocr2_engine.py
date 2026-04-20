@@ -28,14 +28,24 @@ class OCR2Engine:
         model_name: str = "nanonets/Nanonets-OCR2-3B",
         max_tokens: int = 4096,
         timeout: int = 120,
+        api_key: str | None = None,
+        extra_headers: dict[str, str] | None = None,
     ):
         self.api_base = api_base.rstrip("/")
         self.model_name = model_name
         self.max_tokens = max_tokens
         self.timeout = timeout
+        self.api_key = api_key
+        self.extra_headers = extra_headers or {}
         self._mode: str = ""  # "api" or "local"
         self._local_model = None
         self._local_processor = None
+
+    def _headers(self) -> dict[str, str]:
+        h = dict(self.extra_headers)
+        if self.api_key:
+            h["Authorization"] = f"Bearer {self.api_key}"
+        return h
 
     def is_available(self) -> bool:
         """Check if OCR2 is usable (either API or local)."""
@@ -53,8 +63,20 @@ class OCR2Engine:
         return False
 
     def _check_api(self) -> bool:
+        # sglang/vLLM expose /health (no auth). OpenAI-compatible endpoints
+        # (OpenRouter, vLLM with auth, LM Studio, ...) use /v1/models with Bearer.
         try:
-            r = requests.get(f"{self.api_base}/health", timeout=3)
+            r = requests.get(
+                f"{self.api_base}/health", timeout=3, headers=self._headers()
+            )
+            if r.status_code == 200:
+                return True
+        except Exception:
+            pass
+        try:
+            r = requests.get(
+                f"{self.api_base}/v1/models", timeout=5, headers=self._headers()
+            )
             return r.status_code == 200
         except Exception:
             return False
@@ -136,6 +158,7 @@ class OCR2Engine:
             f"{self.api_base}/v1/chat/completions",
             json=payload,
             timeout=self.timeout,
+            headers=self._headers(),
         )
         if resp.status_code != 200:
             raise RuntimeError(f"OCR2 API error {resp.status_code}: {resp.text[:200]}")

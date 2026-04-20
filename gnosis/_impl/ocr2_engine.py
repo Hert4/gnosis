@@ -67,7 +67,7 @@ class OCR2Engine:
         # (OpenRouter, vLLM with auth, LM Studio, ...) use /v1/models with Bearer.
         try:
             r = requests.get(
-                f"{self.api_base}/health", timeout=3, headers=self._headers()
+                f"{self.api_base}/health", timeout=3, headers=self._headers(), verify=False
             )
             if r.status_code == 200:
                 return True
@@ -75,7 +75,7 @@ class OCR2Engine:
             pass
         try:
             r = requests.get(
-                f"{self.api_base}/v1/models", timeout=5, headers=self._headers()
+                f"{self.api_base}/v1/models", timeout=5, headers=self._headers(), verify=False
             )
             return r.status_code == 200
         except Exception:
@@ -159,6 +159,7 @@ class OCR2Engine:
             json=payload,
             timeout=self.timeout,
             headers=self._headers(),
+            verify=False,
         )
         if resp.status_code != 200:
             raise RuntimeError(f"OCR2 API error {resp.status_code}: {resp.text[:200]}")
